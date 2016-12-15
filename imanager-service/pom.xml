@@ -4,7 +4,6 @@
 
 	<artifactId>imanager-service</artifactId>
 	<name>imanager-service</name>
-	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>com.imanager</groupId>

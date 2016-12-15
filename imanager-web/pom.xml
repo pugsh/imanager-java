@@ -3,7 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>imanager-web</artifactId>
-	<packaging>war</packaging>
 	<name>imanager-web</name>
 
 	<parent>
@@ -12,7 +11,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../imanager-parent/pom.xml</relativePath>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.imanager</groupId>
@@ -24,5 +23,11 @@
 			<artifactId>imanager-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.imanager</groupId>
+			<artifactId>imanager-common-web</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
+	<packaging>war</packaging>
 </project>
