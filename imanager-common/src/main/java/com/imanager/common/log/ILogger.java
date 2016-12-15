@@ -13,4 +13,6 @@ public interface ILogger {
 	public void error(String errorCode, String errorMessage);
 
 	public void error(String errorCode, String errorMessage, Throwable t);
+
+	public boolean isDebugEnabled();
 }

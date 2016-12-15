@@ -2,6 +2,7 @@ package com.imanager.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.imanager.common.log.AppLogger;
 import com.imanager.common.log.ILogger;
@@ -18,8 +19,8 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDAO productDAO;
 
 	@Override
+	@Transactional
 	public Product getProduct(String productName) {
-		logger.error("", "");
 		return productDAO.getProduct(productName);
 	}
 

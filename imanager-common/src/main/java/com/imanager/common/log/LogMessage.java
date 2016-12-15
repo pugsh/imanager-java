@@ -1,34 +1,38 @@
 package com.imanager.common.log;
 
-public class LogMessage {
+import java.io.Serializable;
 
-	private String errorCode;
-	private String errorMessage;
+public class LogMessage implements Serializable {
 
-	public LogMessage(String errorCode, String errorMessage) {
-		this.errorCode = errorCode;
-		this.errorMessage = errorMessage;
+	private static final long serialVersionUID = 1L;
+
+	private String code;
+	private String message;
+
+	public LogMessage(String code, String message) {
+		this.code = code;
+		this.message = message;
 	}
 
-	public String getErrorCode() {
-		return errorCode;
+	public String getCode() {
+		return code;
 	}
 
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public String getErrorMessage() {
-		return errorMessage;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	@Override
 	public String toString() {
-		return "LogMessage [errorCode=" + errorCode + ", errorMessage=" + errorMessage + "]";
+		return "LogCode=" + code + ", LogMessage=" + message;
 	}
 
 }

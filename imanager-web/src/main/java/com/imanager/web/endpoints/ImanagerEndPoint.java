@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.imanager.common.log.AppLogger;
 import com.imanager.common.log.ILogger;
+import com.imanager.common.log.LogCode;
 import com.imanager.common.util.AppMapper;
 import com.imanager.common.web.constants.WebConstants;
 import com.imanager.common.web.response.ISimpleResponse;
@@ -27,9 +28,9 @@ import com.imanager.web.vo.ProductResponseVO;
 
 @Service
 @Path("/v1")
-public class ApiEndPoint {
+public class ImanagerEndPoint {
 
-	private static final ILogger logger = AppLogger.getLogger(ApiEndPoint.class);
+	private static final ILogger logger = AppLogger.getLogger(ImanagerEndPoint.class);
 
 	@Autowired
 	private SimpleResponseBuilder responseBuilder;
@@ -56,6 +57,7 @@ public class ApiEndPoint {
 	@Path("/products/{productName}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProducts(@Context HttpHeaders headers, @PathParam("productName") String productName) {
+		long startTime = System.currentTimeMillis();
 
 		ResponseBuilder builder = null;
 		Response response = null;
@@ -67,11 +69,20 @@ public class ApiEndPoint {
 			builder = responseBuilder.buildSuccessResponse(successResponse, headers, WebConstants.SUCCESS,
 					WebConstants.STATUS_200);
 			response = builder.build();
+
 		} catch (Exception e) {
 			builder = responseUtil.buildErrorResponse(headers, WebConstants.MESSAGE_CODE_500_DESCRIPTION,
 					responseBuilder);
 			response = builder.build();
-			logger.error("", "", e);
+			logger.error(LogCode.API_ERROR_CODE, "Error occured", e);
+		} finally {
+			long endTime = System.currentTimeMillis();
+			if (logger.isDebugEnabled()) {
+				logger.info(LogCode.API_INFO_CODE, "Response time {%s}" + (endTime - startTime));
+			}
+			if (responseVO != null) {
+				logger.info(LogCode.API_INFO_CODE, responseVO.toString());
+			}
 		}
 		return response;
 	}
