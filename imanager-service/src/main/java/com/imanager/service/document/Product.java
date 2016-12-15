@@ -1,22 +1,16 @@
 package com.imanager.service.document;
 
-import org.springframework.data.annotation.Id;
+import java.util.List;
 
-//@Document(collection = ServiceConstants.PRODUCT_COLLECTIONS)
-public class Product {
+public class Product extends BaseDocument {
 
-	@Id
-	private String id;
 	private String productId;
 	private String productName;
 	private Double price;
+	private List<String> suppliers;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	public Product() {
+		super();
 	}
 
 	public String getProductId() {
@@ -41,6 +35,14 @@ public class Product {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public List<String> getSuppliers() {
+		return suppliers;
+	}
+
+	public void setSuppliers(List<String> suppliers) {
+		this.suppliers = suppliers;
 	}
 
 	@Override

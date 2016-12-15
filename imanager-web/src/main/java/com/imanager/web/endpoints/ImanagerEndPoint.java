@@ -16,15 +16,13 @@ import org.springframework.stereotype.Service;
 import com.imanager.common.log.AppLogger;
 import com.imanager.common.log.ILogger;
 import com.imanager.common.log.LogCode;
-import com.imanager.common.util.AppMapper;
 import com.imanager.common.web.constants.WebConstants;
 import com.imanager.common.web.response.ISimpleResponse;
 import com.imanager.common.web.response.SimpleResponseBuilder;
 import com.imanager.common.web.util.SimpleResponseUtil;
-import com.imanager.service.ProductService;
-import com.imanager.service.TestService;
-import com.imanager.service.document.Product;
-import com.imanager.web.vo.ProductResponseVO;
+import com.imanager.service.IBaseService;
+import com.imanager.service.document.vo.BaseVO;
+import com.imanager.service.enums.DocumentType;
 
 @Service
 @Path("/v1")
@@ -39,49 +37,35 @@ public class ImanagerEndPoint {
 	private SimpleResponseUtil responseUtil;
 
 	@Autowired
-	private TestService testService;
-
-	@Autowired
-	private ProductService productService;
-
-	@Autowired
-	private AppMapper mapper;
+	private IBaseService baseService;
 
 	@GET
-	@Path("/test")
-	public String checkHeartBeat() {
-		return testService.testService();
-	}
-
-	@GET
-	@Path("/products/{productName}")
+	@Path("{document}/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProducts(@Context HttpHeaders headers, @PathParam("productName") String productName) {
+	public Response getDocument(@Context HttpHeaders headers, @PathParam("document") String document,
+			@PathParam("id") int id) {
 		long startTime = System.currentTimeMillis();
+		boolean debugEnabled = logger.isDebugEnabled();
 
 		ResponseBuilder builder = null;
 		Response response = null;
-		ProductResponseVO responseVO = null;
+		BaseVO baseVO = null;
 		try {
-			Product product = productService.getProduct(productName);
-			responseVO = mapper.map(product, ProductResponseVO.class);
-			ISimpleResponse<ProductResponseVO> successResponse = responseUtil.buildSuccessResponse(responseVO);
+			DocumentType documentType = DocumentType.toEnum(document);
+			baseVO = baseService.getDocumentById(documentType, id);
+			ISimpleResponse<BaseVO> successResponse = responseUtil.buildSuccessResponse(baseVO);
 			builder = responseBuilder.buildSuccessResponse(successResponse, headers, WebConstants.SUCCESS,
 					WebConstants.STATUS_200);
 			response = builder.build();
-
 		} catch (Exception e) {
-			builder = responseUtil.buildErrorResponse(headers, WebConstants.MESSAGE_CODE_500_DESCRIPTION,
-					responseBuilder);
-			response = builder.build();
 			logger.error(LogCode.API_ERROR_CODE, "Error occured", e);
 		} finally {
 			long endTime = System.currentTimeMillis();
-			if (logger.isDebugEnabled()) {
+			if (debugEnabled) {
 				logger.info(LogCode.API_INFO_CODE, "Response time {%s}" + (endTime - startTime));
 			}
-			if (responseVO != null) {
-				logger.info(LogCode.API_INFO_CODE, responseVO.toString());
+			if (baseVO != null) {
+				logger.info(LogCode.API_INFO_CODE, baseVO.toString());
 			}
 		}
 		return response;
