@@ -1,0 +1,44 @@
+<Configuration status="WARN">
+	<Properties>
+		<Property name="log-path">/home/plk/workspace/imanager-java/logs
+		</Property>
+	</Properties>
+	<Appenders>
+		<Console name="console-log" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+		</Console>
+		<RollingFile name="trace-log" fileName="${log-path}/main-trace.log"
+			filePattern="${log-path}/main-trace-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="perf-log" fileName="${log-path}/perf.log"
+			filePattern="${log-path}/perf-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.imanager" level="DEBUG" additivity="false">
+			<appender-ref ref="trace-log" level="DEBUG" />
+			<appender-ref ref="perf-log" level="INFO" />
+			<appender-ref ref="console-log" level="INFO" />
+		</Logger>
+		<Root level="INFO" additivity="false">
+			<AppenderRef ref="console-log" />
+		</Root>
+	</Loggers>
+</Configuration>

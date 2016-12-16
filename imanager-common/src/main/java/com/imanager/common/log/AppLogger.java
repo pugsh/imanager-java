@@ -1,7 +1,10 @@
 package com.imanager.common.log;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.io.File;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 
 public class AppLogger implements ILogger {
 
@@ -11,6 +14,12 @@ public class AppLogger implements ILogger {
 		this.logger = logger;
 	}
 
+	public static void initialize(String configFile) {
+		LoggerContext context = (LoggerContext) LogManager.getContext(false);
+		File file = new File(configFile);
+		context.setConfigLocation(file.toURI());
+	}
+
 	public static ILogger getLogger(Class<?> className) {
 		Logger logger = LogManager.getLogger(className);
 		return new AppLogger(logger);
@@ -18,38 +27,38 @@ public class AppLogger implements ILogger {
 
 	@Override
 	public void error(String errorCode, String message) {
-		LogMessage logMessage = LogUtil.createLogMessage(errorCode, message);
+		String logMessage = LogUtil.getLogMessage(errorCode, message);
 		logger.error(logMessage);
 	}
 
 	@Override
-	public void error(String errorCode, String message, Throwable t) {
-		LogMessage logMessage = LogUtil.createLogMessage(errorCode, message);
-		logger.error(logMessage, t);
+	public void error(String errorCode, String message, Object... params) {
+		String logMessage = LogUtil.getLogMessage(errorCode, message);
+		logger.error(logMessage, params);
 	}
 
 	@Override
 	public void info(String errorCode, String message) {
-		LogMessage logMessage = LogUtil.createLogMessage(errorCode, message);
+		String logMessage = LogUtil.getLogMessage(errorCode, message);
 		logger.info(logMessage);
 	}
 
 	@Override
-	public void info(String errorCode, String message, Throwable t) {
-		LogMessage logMessage = LogUtil.createLogMessage(errorCode, message);
-		logger.info(logMessage, t);
+	public void info(String errorCode, String message, Object... params) {
+		String logMessage = LogUtil.getLogMessage(errorCode, message);
+		logger.info(logMessage, params);
 	}
 
 	@Override
 	public void debug(String errorCode, String message) {
-		LogMessage logMessage = LogUtil.createLogMessage(errorCode, message);
+		String logMessage = LogUtil.getLogMessage(errorCode, message);
 		logger.debug(logMessage);
 	}
 
 	@Override
-	public void debug(String errorCode, String message, Throwable t) {
-		LogMessage logMessage = LogUtil.createLogMessage(errorCode, message);
-		logger.debug(logMessage, t);
+	public void debug(String errorCode, String message, Object... params) {
+		String logMessage = LogUtil.getLogMessage(errorCode, message);
+		logger.debug(logMessage, params);
 	}
 
 	@Override

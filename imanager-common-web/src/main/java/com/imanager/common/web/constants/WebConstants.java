@@ -14,6 +14,7 @@ public class WebConstants {
 	/** The Constant MESSAGE_CODE_500_DESCRIPTION. */
 	public static final String MESSAGE_CODE_500_DESCRIPTION = "The server encountered an unexpected condition which prevented it from fulfilling the request.";
 
+	public static final String NO_DATA_FOUND = "Data not found";
 	private WebConstants() {
 	}
 }

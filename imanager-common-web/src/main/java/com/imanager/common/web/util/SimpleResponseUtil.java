@@ -24,6 +24,19 @@ public class SimpleResponseUtil {
 		String statusCode = String.valueOf(WebConstants.STATUS_500);
 		String statusDescription = WebConstants.CODE_500_MESSAGE;
 		ErrorResponse errorResponse = new ErrorResponse(statusDescription, statusCode, errorMessage);
-		return builder.buildErrorResponse(errorResponse, headers, statusDescription, WebConstants.STATUS_500);
+		return builder.buildErrorResponse(createErrorResponse(errorResponse), headers, statusDescription,
+				WebConstants.STATUS_500);
+	}
+
+	public ResponseBuilder buildNoDataFoundResponse(HttpHeaders headers, SimpleResponseBuilder builder) {
+		String statusCode = String.valueOf(WebConstants.STATUS_200);
+		String statusDescription = WebConstants.SUCCESS;
+		ErrorResponse errorResponse = new ErrorResponse(statusDescription, statusCode, WebConstants.NO_DATA_FOUND);
+		return builder.buildErrorResponse(createErrorResponse(errorResponse), headers, statusDescription,
+				WebConstants.STATUS_500);
+	}
+
+	private <T> SimpleResponse<T> createErrorResponse(T errorResponse) {
+		return new SimpleResponse<>(WebConstants.SUCCESS, LOCALE, errorResponse);
 	}
 }

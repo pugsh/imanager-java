@@ -1,4 +1,4 @@
-package com.imanager.service.document.vo;
+package com.imanager.service.vo;
 
 public abstract class BaseVO {
 

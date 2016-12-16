@@ -6,6 +6,10 @@
 	<display-name>imanager-web</display-name>
 
 	<listener>
+		<listener-class>com.imanager.common.web.listener.AppContextListener</listener-class>
+	</listener>
+
+	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 

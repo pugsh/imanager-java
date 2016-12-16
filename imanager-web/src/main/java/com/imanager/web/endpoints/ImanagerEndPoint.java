@@ -21,8 +21,9 @@ import com.imanager.common.web.response.ISimpleResponse;
 import com.imanager.common.web.response.SimpleResponseBuilder;
 import com.imanager.common.web.util.SimpleResponseUtil;
 import com.imanager.service.IBaseService;
-import com.imanager.service.document.vo.BaseVO;
 import com.imanager.service.enums.DocumentType;
+import com.imanager.service.exception.NoDataFoundException;
+import com.imanager.service.vo.BaseVO;
 
 @Service
 @Path("/v1")
@@ -57,12 +58,19 @@ public class ImanagerEndPoint {
 			builder = responseBuilder.buildSuccessResponse(successResponse, headers, WebConstants.SUCCESS,
 					WebConstants.STATUS_200);
 			response = builder.build();
+		} catch (NoDataFoundException e) {
+			builder = responseUtil.buildNoDataFoundResponse(headers, responseBuilder);
+			response = builder.build();
+			logger.debug(LogCode.API_DEBUG_CODE, "Error occured", e);
 		} catch (Exception e) {
+			builder = responseUtil.buildErrorResponse(headers, "Unexpected error occured during processing",
+					responseBuilder);
+			response = builder.build();
 			logger.error(LogCode.API_ERROR_CODE, "Error occured", e);
 		} finally {
 			long endTime = System.currentTimeMillis();
 			if (debugEnabled) {
-				logger.info(LogCode.API_INFO_CODE, "Response time {%s}" + (endTime - startTime));
+				logger.info(LogCode.API_INFO_CODE, "Response time {}", endTime - startTime);
 			}
 			if (baseVO != null) {
 				logger.info(LogCode.API_INFO_CODE, baseVO.toString());

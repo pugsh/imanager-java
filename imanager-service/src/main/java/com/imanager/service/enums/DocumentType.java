@@ -6,8 +6,8 @@ import java.util.Map;
 import com.imanager.service.constants.ServiceConstants;
 import com.imanager.service.document.Product;
 import com.imanager.service.document.Supplier;
-import com.imanager.service.document.vo.ProductVO;
-import com.imanager.service.document.vo.SupplierVO;
+import com.imanager.service.vo.ProductVO;
+import com.imanager.service.vo.SupplierVO;
 
 public enum DocumentType {
 	PRODUCT(ServiceConstants.PRODUCT_DOCUMENT, ServiceConstants.PROPS_PRODUCTID, Product.class, ProductVO.class,

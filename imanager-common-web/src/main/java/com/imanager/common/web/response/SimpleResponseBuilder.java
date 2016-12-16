@@ -21,13 +21,13 @@ public class SimpleResponseBuilder {
 		return builder;
 	}
 
-	public ResponseBuilder buildErrorResponse(ErrorResponse errorResponse, HttpHeaders headers, String headerMessage,
-			int statusCode) {
+	public <T> ResponseBuilder buildErrorResponse(SimpleResponse<T> errorResponse, HttpHeaders headers,
+			String headerMessage, int statusCode) {
 		ResponseBuilder builder = Response.status(statusCode);
 		Gson gson = new GsonBuilder().create();
 		builder.entity(gson.toJson(errorResponse));
 		builder.header(headerMessage, headers);
 		return builder;
 	}
-	
+
 }

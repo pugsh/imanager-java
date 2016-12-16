@@ -1,10 +1,12 @@
 package com.imanager.service.dao;
 
+import java.io.Serializable;
+
+import com.imanager.service.dao.filter.DocumentSearch;
 import com.imanager.service.document.BaseDocument;
-import com.imanager.service.enums.DocumentType;
 
 @FunctionalInterface
 public interface IBaseDAO {
 
-	public BaseDocument getDocumentById(DocumentType documentType, int id);
+	public BaseDocument getDocumentById(DocumentSearch<? extends Serializable> filter) throws Exception;
 }
