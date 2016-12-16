@@ -38,10 +38,10 @@ public class BaseServiceImpl implements IBaseService {
 			BaseDocument document = baseDAO.getDocumentById(search);
 			vo = (BaseVO) mapper.map(document, docType.getVoClass());
 		} catch (NoDataFoundException e) {
-			logger.debug(LogCode.SRV_ERROR_CODE, "No data found", e);
+			logger.debug(LogCode.SVC_ERROR_CODE, "No data found", e);
 			throw new NoDataFoundException("No data found");
 		} catch (Exception e) {
-			logger.error(LogCode.SRV_ERROR_CODE, "Exception occured while fetching data", e);
+			logger.error(LogCode.SVC_ERROR_CODE, "Exception occured while fetching data", e);
 			throw new ServiceOpException("Exception occured while fetching data");
 		}
 		return vo;

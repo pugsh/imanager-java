@@ -1,4 +1,4 @@
-<Configuration status="WARN">
+<Configuration>
 	<Properties>
 		<Property name="log-path">/home/plk/workspace/imanager-java/logs
 		</Property>
