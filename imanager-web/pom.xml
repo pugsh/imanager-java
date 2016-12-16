@@ -4,6 +4,7 @@
 
 	<artifactId>imanager-web</artifactId>
 	<name>imanager-web</name>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>com.imanager</groupId>
@@ -29,5 +30,24 @@
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	<packaging>war</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Build_Number>${project.version}</Build_Number>
+							<Build_Date>${maven.build.timestamp}</Build_Date>
+							<Build_User>${user.name}</Build_User>
+							<Build_Java>${java.version}</Build_Java>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
