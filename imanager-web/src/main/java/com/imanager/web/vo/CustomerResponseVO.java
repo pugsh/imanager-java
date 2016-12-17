@@ -1,11 +1,13 @@
-package com.imanager.service.vo;
+package com.imanager.web.vo;
 
-public class CustomerVO extends BaseVO {
+import com.imanager.service.model.Address;
+
+public class CustomerResponseVO {
 
 	private Long customerId;
 	private String customerName;
 	private String contact;
-	private AddressVO address;
+	private Address address;
 
 	public Long getCustomerId() {
 		return customerId;
@@ -31,17 +33,18 @@ public class CustomerVO extends BaseVO {
 		this.contact = contact;
 	}
 
-	public AddressVO getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(AddressVO address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
 	@Override
 	public String toString() {
-		return "CustomerVO [customerId=" + customerId + ", customerName=" + customerName + ", contact=" + contact
-				+ ", address=" + address + "]";
+		return "CustomerResponseVO [customerId=" + customerId + ", customerName=" + customerName + ", contact="
+				+ contact + ", address=" + address + "]";
 	}
+
 }

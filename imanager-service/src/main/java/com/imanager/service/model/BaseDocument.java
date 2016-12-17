@@ -1,7 +1,6 @@
 package com.imanager.service.model;
 
-import java.util.Date;
-
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -12,13 +11,13 @@ import org.springframework.data.annotation.Version;
 public abstract class BaseDocument {
 	
 	@Id
-	protected String oid;
+	private String oid;
 	@Version
 	private Long version;
 	@CreatedDate
-	private Date createdAt;
+	private DateTime createdAt;
 	@LastModifiedDate
-	private Date lastModified;
+	private DateTime lastModified;
 	@CreatedBy
 	private String createdBy;
 	@LastModifiedBy
@@ -49,19 +48,19 @@ public abstract class BaseDocument {
 		this.version = version;
 	}
 
-	public Date getCreatedAt() {
+	public DateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Date getLastModified() {
+	public DateTime getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(DateTime lastModified) {
 		this.lastModified = lastModified;
 	}
 

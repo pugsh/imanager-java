@@ -1,13 +1,13 @@
 package com.imanager.service.vo;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public abstract class BaseVO {
 
-	protected String oid;
+	private String oid;
 	private Long version;
-	private Date createdAt;
-	private Date lastModified;
+	private DateTime createdAt;
+	private DateTime lastModified;
 	private String createdBy;
 	private String lastModifiedBy;
 
@@ -30,19 +30,19 @@ public abstract class BaseVO {
 		this.version = version;
 	}
 
-	public Date getCreatedAt() {
+	public DateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Date getLastModified() {
+	public DateTime getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(DateTime lastModified) {
 		this.lastModified = lastModified;
 	}
 

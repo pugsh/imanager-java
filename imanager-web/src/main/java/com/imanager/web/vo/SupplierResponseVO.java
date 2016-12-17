@@ -48,4 +48,10 @@ public class SupplierResponseVO {
 		this.address = address;
 	}
 
+	@Override
+	public String toString() {
+		return "SupplierResponseVO [supplierId=" + supplierId + ", supplierName=" + supplierName + ", ownerName="
+				+ ownerName + ", contact=" + contact + ", address=" + address + "]";
+	}
+
 }

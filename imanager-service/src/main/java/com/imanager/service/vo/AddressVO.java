@@ -1,6 +1,7 @@
 package com.imanager.service.vo;
 
 public class AddressVO {
+	
 	private String street;
 	private String city;
 	private String state;

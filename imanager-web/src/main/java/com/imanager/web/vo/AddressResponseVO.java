@@ -39,4 +39,9 @@ public class AddressResponseVO {
 		this.pin = pin;
 	}
 
+	@Override
+	public String toString() {
+		return "AddressResponseVO [street=" + street + ", city=" + city + ", state=" + state + ", pin=" + pin + "]";
+	}
+
 }

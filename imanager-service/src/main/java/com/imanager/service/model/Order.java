@@ -1,6 +1,5 @@
 package com.imanager.service.model;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,8 +13,6 @@ public class Order extends BaseDocument {
 	@Indexed
 	private Long orderId;
 	private Supplier supplier;
-	private Date orderDate;
-	private Date lastUpdateDate;
 	private List<Item> items;
 
 	public Long getOrderId() {
@@ -34,22 +31,6 @@ public class Order extends BaseDocument {
 		this.supplier = supplier;
 	}
 
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public Date getLastUpdateDate() {
-		return lastUpdateDate;
-	}
-
-	public void setLastUpdateDate(Date lastUpdateDate) {
-		this.lastUpdateDate = lastUpdateDate;
-	}
-
 	public List<Item> getItems() {
 		return items;
 	}
@@ -60,8 +41,7 @@ public class Order extends BaseDocument {
 
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", supplier=" + supplier + ", orderDate=" + orderDate + ", lastUpdateDate="
-				+ lastUpdateDate + ", items=" + items + "]";
+		return "Order [orderId=" + orderId + ", supplier=" + supplier + ", items=" + items + "]";
 	}
 
 	@Override

@@ -35,9 +35,9 @@
 		<Logger name="com.imanager" level="DEBUG" additivity="false">
 			<appender-ref ref="trace-log" level="DEBUG" />
 			<appender-ref ref="perf-log" level="INFO" />
-			<appender-ref ref="console-log" level="INFO" />
+			<appender-ref ref="console-log" level="DEBUG" />
 		</Logger>
-		<Root level="INFO" additivity="false">
+		<Root level="DEBUG" additivity="false">
 			<AppenderRef ref="console-log" />
 		</Root>
 	</Loggers>

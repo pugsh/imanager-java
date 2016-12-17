@@ -13,11 +13,12 @@ import com.imanager.common.log.LogCode;
 import com.imanager.common.util.AppMapper;
 import com.imanager.service.IBaseService;
 import com.imanager.service.dao.IBaseDAO;
-import com.imanager.service.dao.filter.DocumentSearch;
+import com.imanager.service.dao.filter.DocumentFilter;
 import com.imanager.service.enums.DocumentType;
 import com.imanager.service.exception.NoDataFoundException;
 import com.imanager.service.exception.ServiceOpException;
 import com.imanager.service.model.BaseDocument;
+import com.imanager.service.request.SearchRequest;
 import com.imanager.service.vo.BaseVO;
 
 @Service
@@ -35,7 +36,7 @@ public class BaseServiceImpl implements IBaseService {
 	public BaseVO getDocumentById(DocumentType docType, int id) throws ServiceOpException, NoDataFoundException {
 		BaseVO vo = null;
 		try {
-			DocumentSearch<Integer> search = new DocumentSearch<>(docType.getEntityClass(), docType.getKeyPropsName(),
+			DocumentFilter<Integer> search = new DocumentFilter<>(docType.getEntityClass(), docType.getKeyPropsName(),
 					id, docType.getCollectionName());
 			BaseDocument document = baseDAO.findById(search);
 			vo = (BaseVO) mapper.map(document, docType.getVoClass());
@@ -50,16 +51,21 @@ public class BaseServiceImpl implements IBaseService {
 	}
 
 	@Override
-	public List<BaseVO> getAllDocuments(DocumentType documentType) throws ServiceOpException, NoDataFoundException {
+	public List<BaseVO> getDocuments(SearchRequest request) throws ServiceOpException, NoDataFoundException {
 		BaseVO vo = null;
 		List<BaseVO> retVo = null;
 		try {
-			DocumentSearch<Integer> search = new DocumentSearch<>(documentType.getEntityClass(),
+			DocumentType documentType = request.getDocumentType();
+			DocumentFilter<Integer> search = new DocumentFilter<>(documentType.getEntityClass(),
 					documentType.getKeyPropsName());
-			List<BaseDocument> allDocs = baseDAO.findAll(search);
-			if (CollectionUtils.isNotEmpty(allDocs)) {
-				retVo = new ArrayList<>(allDocs.size());
-				for (BaseDocument baseDocument : allDocs) {
+			search.setStartIndex(request.getStartIndex());
+			search.setTotalRecords(request.getTotalRecords());
+			search.setSortOrder(request.getSortOrder());
+
+			List<BaseDocument> docs = baseDAO.find(search);
+			if (CollectionUtils.isNotEmpty(docs)) {
+				retVo = new ArrayList<>(docs.size());
+				for (BaseDocument baseDocument : docs) {
 					vo = (BaseVO) mapper.map(baseDocument, documentType.getVoClass());
 					retVo.add(vo);
 				}
@@ -80,11 +86,33 @@ public class BaseServiceImpl implements IBaseService {
 		try {
 			if (vo != null) {
 				BaseDocument document = (BaseDocument) mapper.map(vo, docType.getEntityClass());
-				baseDAO.save(document);
+				baseDAO.insert(document);
 			}
 		} catch (Exception e) {
 			logger.error(LogCode.SVC_ERROR_CODE, "Unexpexted error occured in createDocument.", e);
 			throw new ServiceOpException("Unexpected error occured creating document.");
+		}
+	}
+
+	@Override
+	public void updateDocument(DocumentType docType, BaseVO vo) throws ServiceOpException {
+		try {
+			BaseDocument document = (BaseDocument) mapper.map(vo, docType.getEntityClass());
+			baseDAO.update(document);
+		} catch (Exception e) {
+			logger.error(LogCode.SVC_ERROR_CODE, "Unexpexted error occured in updateDocument.", e);
+			throw new ServiceOpException("Unexpected error occured updating document.");
+		}
+	}
+
+	@Override
+	public void removeDocument(DocumentType docType, BaseVO vo) throws ServiceOpException {
+		try {
+			BaseDocument document = (BaseDocument) mapper.map(vo, docType.getEntityClass());
+			baseDAO.delete(document);
+		} catch (Exception e) {
+			logger.error(LogCode.SVC_ERROR_CODE, "Unexpexted error occured in removeDocument.", e);
+			throw new ServiceOpException("Unexpected error occured deleting document.");
 		}
 	}
 

@@ -40,6 +40,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
@@ -197,6 +202,8 @@
 						<manifestEntries>
 							<Build_Number>${project.version}</Build_Number>
 							<Build_Date>${maven.build.timestamp}</Build_Date>
+							<Build_User>${user.name}</Build_User>
+							<Build_Java>${java.version}</Build_Java>
 						</manifestEntries>
 					</archive>
 				</configuration>

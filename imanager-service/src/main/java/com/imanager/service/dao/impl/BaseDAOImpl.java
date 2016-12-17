@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,7 +16,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.imanager.service.dao.IBaseDAO;
-import com.imanager.service.dao.filter.DocumentSearch;
+import com.imanager.service.dao.filter.DocumentFilter;
+import com.imanager.service.enums.SortDirection;
 import com.imanager.service.exception.InvalidSearchParameter;
 import com.imanager.service.exception.NoDataFoundException;
 import com.imanager.service.exception.SequenceException;
@@ -28,9 +31,8 @@ public class BaseDAOImpl implements IBaseDAO {
 	private MongoOperations mongoOperation;
 
 	@Override
-	public BaseDocument findById(DocumentSearch<? extends Serializable> filter) throws Exception {
-		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())
-				|| StringUtils.isEmpty(filter.getCollectionName())) {
+	public BaseDocument findById(DocumentFilter<? extends Serializable> filter) throws Exception {
+		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())) {
 			throw new InvalidSearchParameter("Invalid search paramater");
 		}
 		BaseDocument document;
@@ -46,8 +48,8 @@ public class BaseDAOImpl implements IBaseDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<BaseDocument> findAll(DocumentSearch<?> filter) throws Exception {
-		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())) {
+	public List<BaseDocument> findAll(DocumentFilter<?> filter) throws Exception {
+		if (filter == null) {
 			throw new InvalidSearchParameter("Invalid search paramater");
 		}
 		List<BaseDocument> allDocuments = (List<BaseDocument>) mongoOperation.findAll(filter.getEntityClass());
@@ -57,11 +59,47 @@ public class BaseDAOImpl implements IBaseDAO {
 		return allDocuments;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void save(BaseDocument document) throws SequenceException {
+	public List<BaseDocument> find(DocumentFilter<?> filter) throws Exception {
+		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())) {
+			throw new InvalidSearchParameter("Invalid search paramater");
+		}
+		Query query = new Query();
+		if (filter.getStartIndex() != null) {
+			query.skip(filter.getStartIndex());
+		}
+		if (filter.getTotalRecords() != null) {
+			query.limit(filter.getTotalRecords());
+		}
+		if (filter.getSortOrder() != null) {
+			SortDirection sortDirection = filter.getSortOrder().getSortDirection();
+			Sort sort = new Sort(Direction.fromString(sortDirection.getValue()),
+					filter.getSortOrder().getPropertyName());
+			query.with(sort);
+		}
+		List<BaseDocument> allDocuments = (List<BaseDocument>) mongoOperation.find(query, filter.getEntityClass());
+		if (CollectionUtils.isEmpty(allDocuments)) {
+			throw new NoDataFoundException("No data found");
+		}
+		return allDocuments;
+	}
+
+	@Override
+	public void insert(BaseDocument document) throws SequenceException {
 		Long sequenceId = getNextSequenceId(document.getKeyName());
 		document.setKeyValue(sequenceId);
+		mongoOperation.insert(document);
+	}
+
+	@Override
+	public void update(BaseDocument document) throws SequenceException {
 		mongoOperation.save(document);
+	}
+
+	@Override
+	public void delete(BaseDocument document) throws SequenceException {
+		mongoOperation.remove(document);
 	}
 
 	private Long getNextSequenceId(String key) throws SequenceException {
