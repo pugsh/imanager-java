@@ -4,20 +4,20 @@ import java.util.List;
 
 public class ProductVO extends BaseVO {
 
-	private String productId;
+	private Long productId;
 	private String productName;
 	private Double price;
-	private List<String> suppliers;
+	private List<SupplierVO> suppliers;
 
 	public ProductVO() {
 		super();
 	}
 
-	public String getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 
@@ -37,12 +37,18 @@ public class ProductVO extends BaseVO {
 		this.price = price;
 	}
 
-	public List<String> getSuppliers() {
+	public List<SupplierVO> getSuppliers() {
 		return suppliers;
 	}
 
-	public void setSuppliers(List<String> suppliers) {
+	public void setSuppliers(List<SupplierVO> suppliers) {
 		this.suppliers = suppliers;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductVO [productId=" + productId + ", productName=" + productName + ", price=" + price
+				+ ", suppliers=" + suppliers + "]";
 	}
 
 }

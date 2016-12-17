@@ -1,12 +1,19 @@
-package com.imanager.service.vo;
+package com.imanager.service.model;
 
-public class SupplierVO extends BaseVO {
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.imanager.service.constants.ServiceConstants;
+
+@Document(collection = ServiceConstants.SUPPLIER_COLLECTION)
+public class Supplier extends BaseDocument {
+
+	@Indexed
 	private Long supplierId;
 	private String supplierName;
 	private String ownerName;
 	private String contact;
-	private AddressVO address;
+	private Address address;
 
 	public Long getSupplierId() {
 		return supplierId;
@@ -40,18 +47,33 @@ public class SupplierVO extends BaseVO {
 		this.contact = contact;
 	}
 
-	public AddressVO getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(AddressVO address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
 	@Override
 	public String toString() {
-		return "SupplierVO [supplierId=" + supplierId + ", supplierName=" + supplierName + ", ownerName=" + ownerName
+		return "Supplier [supplierId=" + supplierId + ", supplierName=" + supplierName + ", ownerName=" + ownerName
 				+ ", contact=" + contact + ", address=" + address + "]";
+	}
+
+	@Override
+	public String getKeyName() {
+		return ServiceConstants.PROPS_SUPPLIERID;
+	}
+
+	@Override
+	public Long getKeyValue() {
+		return this.supplierId;
+	}
+
+	@Override
+	public void setKeyValue(Long value) {
+		this.supplierId = value;
 	}
 
 }

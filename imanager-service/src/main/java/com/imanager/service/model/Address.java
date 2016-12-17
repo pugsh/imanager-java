@@ -1,4 +1,4 @@
-package com.imanager.service.document;
+package com.imanager.service.model;
 
 public class Address {
 
@@ -37,6 +37,11 @@ public class Address {
 
 	public void setPin(String pin) {
 		this.pin = pin;
+	}
+
+	@Override
+	public String toString() {
+		return "Address [street=" + street + ", city=" + city + ", state=" + state + ", pin=" + pin + "]";
 	}
 
 }

@@ -1,28 +1,34 @@
 package com.imanager.service.dao.impl;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.imanager.service.dao.IBaseDAO;
 import com.imanager.service.dao.filter.DocumentSearch;
-import com.imanager.service.document.BaseDocument;
 import com.imanager.service.exception.InvalidSearchParameter;
 import com.imanager.service.exception.NoDataFoundException;
+import com.imanager.service.exception.SequenceException;
+import com.imanager.service.model.BaseDocument;
+import com.imanager.service.model.Sequence;
 
 @Repository
 public class BaseDAOImpl implements IBaseDAO {
 
 	@Autowired
-	private MongoOperations mongoTemplate;
+	private MongoOperations mongoOperation;
 
 	@Override
-	public BaseDocument getDocumentById(DocumentSearch<? extends Serializable> filter) throws Exception {
+	public BaseDocument findById(DocumentSearch<? extends Serializable> filter) throws Exception {
 		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())
 				|| StringUtils.isEmpty(filter.getCollectionName())) {
 			throw new InvalidSearchParameter("Invalid search paramater");
@@ -30,12 +36,57 @@ public class BaseDAOImpl implements IBaseDAO {
 		BaseDocument document;
 		Criteria criteria = Criteria.where(filter.getSearchProperty()).is(filter.getSearchValue());
 		Query query = new Query(criteria);
-		document = (BaseDocument) mongoTemplate.findOne(query, filter.getDocumentClass(),
-				filter.getCollectionName());
+
+		document = (BaseDocument) mongoOperation.findOne(query, filter.getEntityClass());
 		if (document == null) {
 			throw new NoDataFoundException("No data found");
 		}
 		return document;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<BaseDocument> findAll(DocumentSearch<?> filter) throws Exception {
+		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())) {
+			throw new InvalidSearchParameter("Invalid search paramater");
+		}
+		List<BaseDocument> allDocuments = (List<BaseDocument>) mongoOperation.findAll(filter.getEntityClass());
+		if (CollectionUtils.isEmpty(allDocuments)) {
+			throw new NoDataFoundException("No data found");
+		}
+		return allDocuments;
+	}
+
+	@Override
+	public void save(BaseDocument document) throws SequenceException {
+		Long sequenceId = getNextSequenceId(document.getKeyName());
+		document.setKeyValue(sequenceId);
+		mongoOperation.save(document);
+	}
+
+	private Long getNextSequenceId(String key) throws SequenceException {
+
+		// get sequence id
+		Query query = new Query(Criteria.where("name").is(key));
+
+		// increase sequence id by 1
+		Update update = new Update();
+		update.inc("seq", 1);
+
+		// return new increased id
+		FindAndModifyOptions options = new FindAndModifyOptions();
+		options.returnNew(true);
+
+		// this is the magic happened.
+		Sequence sequence = mongoOperation.findAndModify(query, update, options, Sequence.class);
+
+		// if no id, throws SequenceException
+		// optional, just a way to tell user when the sequence id is failed to
+		// generate.
+		if (sequence == null) {
+			throw new SequenceException("Unable to get sequence id for key : " + key);
+		}
+
+		return sequence.getSeq();
+	}
 }

@@ -33,10 +33,14 @@ public class SimpleResponseUtil {
 		String statusDescription = WebConstants.SUCCESS;
 		ErrorResponse errorResponse = new ErrorResponse(statusDescription, statusCode, WebConstants.NO_DATA_FOUND);
 		return builder.buildErrorResponse(createErrorResponse(errorResponse), headers, statusDescription,
-				WebConstants.STATUS_500);
+				WebConstants.STATUS_200);
 	}
 
 	private <T> SimpleResponse<T> createErrorResponse(T errorResponse) {
 		return new SimpleResponse<>(WebConstants.SUCCESS, LOCALE, errorResponse);
+	}
+
+	public ISimpleResponse<String> createConfirmationResponse() {
+		return new SimpleResponse<>(WebConstants.SUCCESS, LOCALE, "");
 	}
 }

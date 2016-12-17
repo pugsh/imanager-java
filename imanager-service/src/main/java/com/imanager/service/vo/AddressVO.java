@@ -37,4 +37,9 @@ public class AddressVO {
 	public void setPin(String pin) {
 		this.pin = pin;
 	}
+
+	@Override
+	public String toString() {
+		return "AddressVO [street=" + street + ", city=" + city + ", state=" + state + ", pin=" + pin + "]";
+	}
 }

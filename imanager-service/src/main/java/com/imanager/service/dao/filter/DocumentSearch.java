@@ -7,13 +7,24 @@ public class DocumentSearch<T extends Serializable> {
 	private String searchProperty;
 	private T searchValue;
 	private String collectionName;
-	private Class<?> documentClass;
+	private Class<?> entityClass;
 
-	public DocumentSearch(Class<?> documentClass, String searchProperty, T searchValue, String collectionName) {
+	public DocumentSearch(Class<?> entityClass, String searchProperty, T searchValue, String collectionName) {
 		this.searchProperty = searchProperty;
 		this.searchValue = searchValue;
 		this.collectionName = collectionName;
-		this.documentClass = documentClass;
+		this.entityClass = entityClass;
+	}
+
+	public DocumentSearch(Class<?> entityClass, String searchProperty) {
+		this.searchProperty = searchProperty;
+		this.entityClass = entityClass;
+	}
+
+	public DocumentSearch(Class<?> entityClass, String searchProperty, T searchValue) {
+		this.searchProperty = searchProperty;
+		this.searchValue = searchValue;
+		this.entityClass = entityClass;
 	}
 
 	public String getSearchProperty() {
@@ -28,14 +39,14 @@ public class DocumentSearch<T extends Serializable> {
 		return searchValue;
 	}
 
-	public Class<?> getDocumentClass() {
-		return documentClass;
+	public Class<?> getEntityClass() {
+		return entityClass;
 	}
 
 	@Override
 	public String toString() {
 		return "DocumentSearch [searchProperty=" + searchProperty + ", searchValue=" + searchValue + ", collectionName="
-				+ collectionName + ", documentClass=" + documentClass + "]";
+				+ collectionName + ", documentClass=" + entityClass + "]";
 	}
 
 }

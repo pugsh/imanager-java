@@ -1,18 +1,37 @@
-package com.imanager.service.vo;
+package com.imanager.service.model;
 
 import java.util.Date;
 
-public abstract class BaseVO {
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 
+public abstract class BaseDocument {
+	
+	@Id
 	protected String oid;
+	@Version
 	private Long version;
+	@CreatedDate
 	private Date createdAt;
+	@LastModifiedDate
 	private Date lastModified;
+	@CreatedBy
 	private String createdBy;
+	@LastModifiedBy
 	private String lastModifiedBy;
 
-	protected BaseVO() {
+	protected BaseDocument() {
 	}
+
+	public abstract String getKeyName();
+
+	public abstract Long getKeyValue();
+
+	public abstract void setKeyValue(Long value);
 
 	public String getOid() {
 		return oid;
@@ -64,7 +83,7 @@ public abstract class BaseVO {
 
 	@Override
 	public String toString() {
-		return "BaseVO [oid=" + oid + ", version=" + version + ", createdAt=" + createdAt + ", lastModified="
+		return "BaseDocument [oid=" + oid + ", version=" + version + ", createdAt=" + createdAt + ", lastModified="
 				+ lastModified + ", createdBy=" + createdBy + ", lastModifiedBy=" + lastModifiedBy + "]";
 	}
 

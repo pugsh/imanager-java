@@ -18,6 +18,7 @@
 		<commons-lang.version>3.5</commons-lang.version>
 		<commons-collections.version>4.0</commons-collections.version>
 		<dozer.version>5.4.0</dozer.version>
+		<joda-time.version>2.9.6</joda-time.version>
 	</properties>
 
 	<dependencies>
@@ -35,11 +36,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
@@ -93,6 +89,12 @@
 			<version>${log4j.version}</version>
 		</dependency>
 		<!-- logging -->
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time.version}</version>
+		</dependency>
 
 		<!-- unit test -->
 		<dependency>
@@ -171,6 +173,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -185,7 +188,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>

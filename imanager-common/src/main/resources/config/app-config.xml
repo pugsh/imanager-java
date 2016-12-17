@@ -3,17 +3,32 @@
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.8.xsd">
+		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.8.xsd"
+	default-autowire="byName">
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.imanager" />
+	<context:property-placeholder
+		location="classpath*:/imanager/app-props.properties" />
 
-	<mongo:mongo id="mongo" host="localhost" port="27017" />
+	<mongo:mongo-client host="${mongo.host}" port="${mongo.port}" />
+	<mongo:db-factory dbname="${mongo.db}" mongo-ref="mongo" />
+	<!-- define default mongo converter -->
+	<mongo:mapping-converter id="converter" />
+	<mongo:auditing auditor-aware-ref="auditor"
+		mapping-context-ref="mappingContext" />
 
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg ref="mongo" />
-		<constructor-arg name="databaseName" value="devdb01" />
+	<!--get the mongo mapping context from mongo converter -->
+	<bean id="mappingContext" factory-bean="converter" factory-method="getMappingContext" />
+	<bean id="auditor" class="com.imanager.common.audit.SimpleAuditor" />
+
+	<bean id="mongoOperation" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="mongoConverter" ref="converter" />
 	</bean>
+
+	<bean
+		class="org.springframework.data.mongodb.core.mapping.event.LoggingEventListener" />
 
 	<bean class="org.dozer.spring.DozerBeanMapperFactoryBean" />
 </beans>
