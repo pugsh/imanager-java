@@ -7,7 +7,8 @@ public class SearchRequest {
 	DocumentType documentType;
 	private Integer startIndex;
 	private Integer totalRecords;
-	private String sortBy;
+	private String sortProps;
+	private String direction;
 
 	public DocumentType getDocumentType() {
 		return documentType;
@@ -33,18 +34,26 @@ public class SearchRequest {
 		this.totalRecords = totalRecords;
 	}
 
-	public String getSortBy() {
-		return sortBy;
+	public String getSortProps() {
+		return sortProps;
 	}
 
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
+	public void setSortProps(String sortProps) {
+		this.sortProps = sortProps;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 
 	@Override
 	public String toString() {
 		return "SearchRequest [documentType=" + documentType + ", startIndex=" + startIndex + ", totalRecords="
-				+ totalRecords + ", sortBy=" + sortBy + "]";
+				+ totalRecords + ", sortProps=" + sortProps + ", direction=" + direction + "]";
 	}
 
 }

@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,7 +105,7 @@ public class ImanagerEndPoint {
 			searchRequest.setStartIndex(startIndex);
 			searchRequest.setTotalRecords(totalRecords);
 			searchRequest.setDocumentType(documentType);
-			searchRequest.setSortBy(sortBy);
+			setSortingParams(searchRequest, sortBy);
 
 			baseVO = baseService.getDocuments(searchRequest);
 			ISimpleResponse<List<BaseVO>> successResponse = responseUtil.buildSuccessResponse(baseVO);
@@ -159,6 +160,19 @@ public class ImanagerEndPoint {
 
 		}
 		return response;
+	}
+
+	private void setSortingParams(SearchRequest searchRequest, String sortBy) {
+		if (searchRequest != null && StringUtils.isNotEmpty(sortBy)) {
+			String[] parts = sortBy.split(",");
+			String propertyName = parts[0];
+			String sortDirection = "asc";
+			if (parts.length > 1) {
+				sortDirection = parts[1];
+			}
+			searchRequest.setSortProps(propertyName);
+			searchRequest.setDirection(sortDirection);
+		}
 	}
 
 }

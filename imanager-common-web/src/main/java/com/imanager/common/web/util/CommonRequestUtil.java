@@ -12,13 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.imanager.common.web.constants.WebConstants;
-import com.imanager.common.web.response.ResponseSerializer;
+import com.imanager.common.web.response.SimpleSerializer;
 
 @Component
 public class CommonRequestUtil {
 
 	public <T extends Object> T toJSONClass(Class<T> clazz, String stringObj) {
-		Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, ResponseSerializer.getDateTimeDserializer())
+		Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, SimpleSerializer.getDateTimeDserializer())
 				.create();
 		return gson.fromJson(stringObj, clazz);
 	}
@@ -27,7 +27,7 @@ public class CommonRequestUtil {
 		List<T> inputList;
 		try {
 			GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(DateTime.class,
-					ResponseSerializer.getDateTimeDserializer());
+					SimpleSerializer.getDateTimeDserializer());
 			T[] jsonToObject = gsonBuilder.create().fromJson(json, clazz);
 			inputList = Arrays.asList(jsonToObject);
 		} catch (JsonSyntaxException jsEx) {

@@ -16,7 +16,7 @@ public class SimpleResponseBuilder {
 	public <T> ResponseBuilder buildSuccessResponse(ISimpleResponse<T> response, HttpHeaders headers,
 			String headerMessage, int statusCode) {
 		ResponseBuilder builder = Response.status(statusCode);
-		Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, ResponseSerializer.getDateTimeSerializer())
+		Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, SimpleSerializer.getDateTimeSerializer())
 				.create();
 		builder.entity(gson.toJson(response));
 		builder.header(headerMessage, headers);

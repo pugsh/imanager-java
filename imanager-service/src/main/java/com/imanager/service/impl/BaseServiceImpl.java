@@ -62,7 +62,11 @@ public class BaseServiceImpl implements IBaseService {
 					documentType.getKeyPropsName());
 			search.setStartIndex(request.getStartIndex());
 			search.setTotalRecords(request.getTotalRecords());
-			setSortingParams(request.getSortBy(), search);
+			
+			if (StringUtils.isNotEmpty(request.getSortProps())) {
+				search.setSortProps(request.getSortProps());
+				search.setSortDirection(Direction.fromString(request.getDirection()));
+			}
 
 			List<BaseDocument> docs = baseDAO.find(search);
 			if (CollectionUtils.isNotEmpty(docs)) {
@@ -118,16 +122,4 @@ public class BaseServiceImpl implements IBaseService {
 		}
 	}
 
-	private void setSortingParams(String sortOrder, DocumentFilter<Integer> search) {
-		if (search != null && StringUtils.isNotEmpty(sortOrder)) {
-			String[] parts = sortOrder.split(",");
-			String propertyName = parts[0];
-			Direction sortDirection = Direction.ASC;
-			if (parts.length > 1) {
-				sortDirection = Direction.fromString(parts[1]);
-			}
-			search.setSortProps(propertyName);
-			search.setSortDirection(sortDirection);
-		}
-	}
 }

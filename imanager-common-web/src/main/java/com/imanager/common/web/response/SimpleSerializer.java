@@ -15,11 +15,11 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.imanager.common.web.constants.WebConstants;
 
-public class ResponseSerializer {
+public class SimpleSerializer {
 
 	private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(WebConstants.RESPONSE_DATE_FORMAT);
 
-	private ResponseSerializer() {
+	private SimpleSerializer() {
 	}
 
 	public static JsonSerializer<DateTime> getDateTimeSerializer() {
