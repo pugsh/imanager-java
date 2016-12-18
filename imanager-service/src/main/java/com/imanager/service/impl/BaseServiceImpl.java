@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.imanager.common.log.AppLogger;
@@ -60,8 +62,7 @@ public class BaseServiceImpl implements IBaseService {
 					documentType.getKeyPropsName());
 			search.setStartIndex(request.getStartIndex());
 			search.setTotalRecords(request.getTotalRecords());
-			search.setSortDirection(request.getSortDirection());
-			search.setSortProps(request.getSortProps());
+			setSortingParams(request.getSortBy(), search);
 
 			List<BaseDocument> docs = baseDAO.find(search);
 			if (CollectionUtils.isNotEmpty(docs)) {
@@ -117,4 +118,16 @@ public class BaseServiceImpl implements IBaseService {
 		}
 	}
 
+	private void setSortingParams(String sortOrder, DocumentFilter<Integer> search) {
+		if (search != null && StringUtils.isNotEmpty(sortOrder)) {
+			String[] parts = sortOrder.split(",");
+			String propertyName = parts[0];
+			Direction sortDirection = Direction.ASC;
+			if (parts.length > 1) {
+				sortDirection = Direction.fromString(parts[1]);
+			}
+			search.setSortProps(propertyName);
+			search.setSortDirection(sortDirection);
+		}
+	}
 }

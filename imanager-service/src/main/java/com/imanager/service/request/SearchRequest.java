@@ -1,7 +1,5 @@
 package com.imanager.service.request;
 
-import org.springframework.data.domain.Sort.Direction;
-
 import com.imanager.service.enums.DocumentType;
 
 public class SearchRequest {
@@ -9,8 +7,7 @@ public class SearchRequest {
 	DocumentType documentType;
 	private Integer startIndex;
 	private Integer totalRecords;
-	private String sortProps;
-	private Direction sortDirection;
+	private String sortBy;
 
 	public DocumentType getDocumentType() {
 		return documentType;
@@ -36,26 +33,18 @@ public class SearchRequest {
 		this.totalRecords = totalRecords;
 	}
 
-	public String getSortProps() {
-		return sortProps;
+	public String getSortBy() {
+		return sortBy;
 	}
 
-	public void setSortProps(String sortProps) {
-		this.sortProps = sortProps;
-	}
-
-	public Direction getSortDirection() {
-		return sortDirection;
-	}
-
-	public void setSortDirection(Direction sortDirection) {
-		this.sortDirection = sortDirection;
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
 	}
 
 	@Override
 	public String toString() {
 		return "SearchRequest [documentType=" + documentType + ", startIndex=" + startIndex + ", totalRecords="
-				+ totalRecords + ", sortProps=" + sortProps + ", sortDirection=" + sortDirection + "]";
+				+ totalRecords + ", sortBy=" + sortBy + "]";
 	}
 
 }
