@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.imanager.common.log.AppLogger;
@@ -29,10 +30,8 @@ import com.imanager.common.web.util.CommonRequestHelper;
 import com.imanager.common.web.util.SimpleResponseUtil;
 import com.imanager.service.IBaseService;
 import com.imanager.service.enums.DocumentType;
-import com.imanager.service.enums.SortDirection;
 import com.imanager.service.exception.NoDataFoundException;
 import com.imanager.service.request.SearchRequest;
-import com.imanager.service.request.Sort;
 import com.imanager.service.vo.BaseVO;
 
 @Service
@@ -104,10 +103,10 @@ public class ImanagerEndPoint {
 		SearchRequest searchRequest = new SearchRequest();
 		try {
 			DocumentType documentType = DocumentType.toEnum(documentName);
-			searchRequest.setSortOrder(getSortOrder(sortBy));
 			searchRequest.setStartIndex(startIndex);
 			searchRequest.setTotalRecords(totalRecords);
 			searchRequest.setDocumentType(documentType);
+			setSortingParams(sortBy, searchRequest);
 
 			baseVO = baseService.getDocuments(searchRequest);
 			ISimpleResponse<List<BaseVO>> successResponse = responseUtil.buildSuccessResponse(baseVO);
@@ -164,18 +163,17 @@ public class ImanagerEndPoint {
 		return response;
 	}
 
-	private Sort getSortOrder(String sortOrder) {
-		if (StringUtils.isEmpty(sortOrder)) {
-			return null;
+	private void setSortingParams(String sortOrder, SearchRequest searchRequest) {
+		if (searchRequest != null && StringUtils.isNotEmpty(sortOrder)) {
+			String[] parts = sortOrder.split(",");
+			String propertyName = parts[0];
+			Direction sortDirection = Direction.ASC;
+			if (parts.length > 1) {
+				sortDirection = Direction.fromString(parts[1]);
+			}
+			searchRequest.setSortProps(propertyName);
+			searchRequest.setSortDirection(sortDirection);
 		}
-
-		String[] parts = sortOrder.split(",");
-		String propertyName = parts[0];
-		SortDirection sortDirection = SortDirection.ASCENDING;
-		if (parts.length > 1) {
-			sortDirection = SortDirection.toEnum(parts[1]);
-		}
-		return new Sort(propertyName, sortDirection);
 	}
 
 }

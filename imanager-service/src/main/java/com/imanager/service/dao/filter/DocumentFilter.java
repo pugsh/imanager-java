@@ -2,7 +2,7 @@ package com.imanager.service.dao.filter;
 
 import java.io.Serializable;
 
-import com.imanager.service.request.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 public class DocumentFilter<T extends Serializable> {
 
@@ -10,9 +10,10 @@ public class DocumentFilter<T extends Serializable> {
 	private T searchValue;
 	private String collectionName;
 	private Class<?> entityClass;
-	private Sort sortOrder;
 	private Integer startIndex;
 	private Integer totalRecords;
+	private String sortProps;
+	private Direction sortDirection;
 
 	public DocumentFilter(Class<?> entityClass, String searchProperty, T searchValue, String collectionName) {
 		this.searchProperty = searchProperty;
@@ -48,12 +49,20 @@ public class DocumentFilter<T extends Serializable> {
 		return entityClass;
 	}
 
-	public Sort getSortOrder() {
-		return sortOrder;
+	public String getSortProps() {
+		return sortProps;
 	}
 
-	public void setSortOrder(Sort sortOrder) {
-		this.sortOrder = sortOrder;
+	public void setSortProps(String sortProps) {
+		this.sortProps = sortProps;
+	}
+
+	public Direction getSortDirection() {
+		return sortDirection;
+	}
+
+	public void setSortDirection(Direction sortDirection) {
+		this.sortDirection = sortDirection;
 	}
 
 	public Integer getStartIndex() {
@@ -75,8 +84,8 @@ public class DocumentFilter<T extends Serializable> {
 	@Override
 	public String toString() {
 		return "DocumentFilter [searchProperty=" + searchProperty + ", searchValue=" + searchValue + ", collectionName="
-				+ collectionName + ", entityClass=" + entityClass + ", sortOrder=" + sortOrder + ", startIndex="
-				+ startIndex + ", totalRecords=" + totalRecords + "]";
+				+ collectionName + ", entityClass=" + entityClass + ", startIndex=" + startIndex + ", totalRecords="
+				+ totalRecords + ", sortProps=" + sortProps + ", sortDirection=" + sortDirection + "]";
 	}
 
 }

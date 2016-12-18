@@ -60,7 +60,8 @@ public class BaseServiceImpl implements IBaseService {
 					documentType.getKeyPropsName());
 			search.setStartIndex(request.getStartIndex());
 			search.setTotalRecords(request.getTotalRecords());
-			search.setSortOrder(request.getSortOrder());
+			search.setSortDirection(request.getSortDirection());
+			search.setSortProps(request.getSortProps());
 
 			List<BaseDocument> docs = baseDAO.find(search);
 			if (CollectionUtils.isNotEmpty(docs)) {

@@ -7,7 +7,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import com.imanager.service.dao.IBaseDAO;
 import com.imanager.service.dao.filter.DocumentFilter;
-import com.imanager.service.enums.SortDirection;
 import com.imanager.service.exception.InvalidSearchParameter;
 import com.imanager.service.exception.NoDataFoundException;
 import com.imanager.service.exception.SequenceException;
@@ -72,10 +70,8 @@ public class BaseDAOImpl implements IBaseDAO {
 		if (filter.getTotalRecords() != null) {
 			query.limit(filter.getTotalRecords());
 		}
-		if (filter.getSortOrder() != null) {
-			SortDirection sortDirection = filter.getSortOrder().getSortDirection();
-			Sort sort = new Sort(Direction.fromString(sortDirection.getValue()),
-					filter.getSortOrder().getPropertyName());
+		if (StringUtils.isNotEmpty(filter.getSortProps())) {
+			Sort sort = new Sort(filter.getSortDirection(), filter.getSortProps());
 			query.with(sort);
 		}
 		List<BaseDocument> allDocuments = (List<BaseDocument>) mongoOperation.find(query, filter.getEntityClass());
