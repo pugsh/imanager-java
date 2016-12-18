@@ -19,6 +19,6 @@ public interface IBaseDAO {
 
 	public void update(BaseDocument document) throws SequenceException;
 
-	public void delete(BaseDocument document) throws SequenceException;
+	public void delete(Class<?> documentClass, String keyName, Integer... deleteIds) throws SequenceException;
 
 }

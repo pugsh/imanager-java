@@ -17,6 +17,8 @@ public class ServiceConstants {
 	public static final String CUSTOMER_COLLECTION = "customers";
 	public static final String SEQUENCE_COLLECTION = "sequences";
 
+	public static final String BASE_SVC = "baseService";
+
 	private ServiceConstants() {
 	}
 

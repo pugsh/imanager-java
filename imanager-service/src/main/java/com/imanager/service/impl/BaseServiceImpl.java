@@ -14,6 +14,7 @@ import com.imanager.common.log.ILogger;
 import com.imanager.common.log.LogCode;
 import com.imanager.common.util.AppMapper;
 import com.imanager.service.IBaseService;
+import com.imanager.service.constants.ServiceConstants;
 import com.imanager.service.dao.IBaseDAO;
 import com.imanager.service.dao.filter.DocumentFilter;
 import com.imanager.service.enums.DocumentType;
@@ -23,7 +24,7 @@ import com.imanager.service.model.BaseDocument;
 import com.imanager.service.request.SearchRequest;
 import com.imanager.service.vo.BaseVO;
 
-@Service
+@Service(ServiceConstants.BASE_SVC)
 public class BaseServiceImpl implements IBaseService {
 
 	private static final ILogger logger = AppLogger.getLogger(BaseServiceImpl.class);
@@ -62,7 +63,7 @@ public class BaseServiceImpl implements IBaseService {
 					documentType.getKeyPropsName());
 			search.setStartIndex(request.getStartIndex());
 			search.setTotalRecords(request.getTotalRecords());
-			
+
 			if (StringUtils.isNotEmpty(request.getSortProps())) {
 				search.setSortProps(request.getSortProps());
 				search.setSortDirection(Direction.fromString(request.getDirection()));
@@ -88,7 +89,7 @@ public class BaseServiceImpl implements IBaseService {
 	}
 
 	@Override
-	public void createDocument(DocumentType docType, BaseVO vo) throws ServiceOpException {
+	public void addDocument(DocumentType docType, BaseVO vo) throws ServiceOpException {
 		try {
 			if (vo != null) {
 				BaseDocument document = (BaseDocument) mapper.map(vo, docType.getEntityClass());
@@ -112,12 +113,12 @@ public class BaseServiceImpl implements IBaseService {
 	}
 
 	@Override
-	public void removeDocument(DocumentType docType, BaseVO vo) throws ServiceOpException {
+	public void removeDocument(DocumentType docType, Integer... deleteIds) throws ServiceOpException {
 		try {
-			BaseDocument document = (BaseDocument) mapper.map(vo, docType.getEntityClass());
-			baseDAO.delete(document);
+			baseDAO.delete(docType.getEntityClass(), docType.getKeyPropsName(), deleteIds);
 		} catch (Exception e) {
-			logger.error(LogCode.SVC_ERROR_CODE, "Unexpexted error occured in removeDocument.", e);
+			logger.error(LogCode.SVC_ERROR_CODE, "Unexpexted error occured in removeDocument. Delete ids {}", deleteIds,
+					e);
 			throw new ServiceOpException("Unexpected error occured deleting document.");
 		}
 	}

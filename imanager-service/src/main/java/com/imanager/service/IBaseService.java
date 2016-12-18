@@ -14,9 +14,9 @@ public interface IBaseService {
 
 	public List<BaseVO> getDocuments(SearchRequest searchRequest) throws ServiceOpException, NoDataFoundException;
 
-	public void createDocument(DocumentType docType, BaseVO vo) throws ServiceOpException;
+	public void addDocument(DocumentType docType, BaseVO vo) throws ServiceOpException;
 
 	public void updateDocument(DocumentType docType, BaseVO vo) throws ServiceOpException;
 
-	public void removeDocument(DocumentType docType, BaseVO vo) throws ServiceOpException;
+	public void removeDocument(DocumentType docType, Integer... deleteIds) throws ServiceOpException;
 }

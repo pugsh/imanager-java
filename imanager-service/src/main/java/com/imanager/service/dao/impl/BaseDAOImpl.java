@@ -1,7 +1,11 @@
 package com.imanager.service.dao.impl;
 
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 import java.io.Serializable;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.WriteResultChecking;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
@@ -30,16 +35,18 @@ public class BaseDAOImpl implements IBaseDAO {
 	@Autowired
 	private MongoOperations mongoOperation;
 
+	@PostConstruct
+	private void setWriteResultChecking() {
+		((MongoTemplate) mongoOperation).setWriteResultChecking(WriteResultChecking.EXCEPTION);
+	}
+
 	@Override
 	public BaseDocument findById(DocumentFilter<? extends Serializable> filter) throws Exception {
 		if (filter == null || StringUtils.isEmpty(filter.getSearchProperty())) {
 			throw new InvalidSearchParameter("Invalid search paramater");
 		}
-		BaseDocument document;
-		Criteria criteria = Criteria.where(filter.getSearchProperty()).is(filter.getSearchValue());
-		Query query = new Query(criteria);
-
-		document = (BaseDocument) mongoOperation.findOne(query, filter.getEntityClass());
+		Query query = new Query(where(filter.getSearchProperty()).is(filter.getSearchValue()));
+		BaseDocument document = (BaseDocument) mongoOperation.findOne(query, filter.getEntityClass());
 		if (document == null) {
 			throw new NoDataFoundException("No data found");
 		}
@@ -85,7 +92,7 @@ public class BaseDAOImpl implements IBaseDAO {
 
 	@Override
 	public void insert(BaseDocument document) throws SequenceException {
-		Customer customer = (Customer)document;
+		Customer customer = (Customer) document;
 		Address address = customer.getAddress();
 		mongoOperation.insert(address);
 		Long sequenceId = getNextSequenceId(document.getKeyName());
@@ -99,14 +106,15 @@ public class BaseDAOImpl implements IBaseDAO {
 	}
 
 	@Override
-	public void delete(BaseDocument document) throws SequenceException {
-		mongoOperation.remove(document);
+	public void delete(Class<?> documentClass, String keyName, Integer... deleteIds) throws SequenceException {
+		Query query = new Query(where(keyName).in((Object[]) deleteIds));
+		mongoOperation.remove(query, documentClass);
 	}
 
 	private Long getNextSequenceId(String key) throws SequenceException {
 
 		// get sequence id
-		Query query = new Query(Criteria.where("name").is(key));
+		Query query = new Query(where("name").is(key));
 
 		// increase sequence id by 1
 		Update update = new Update();
