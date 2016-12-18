@@ -19,7 +19,9 @@ import com.imanager.service.dao.filter.DocumentFilter;
 import com.imanager.service.exception.InvalidSearchParameter;
 import com.imanager.service.exception.NoDataFoundException;
 import com.imanager.service.exception.SequenceException;
+import com.imanager.service.model.Address;
 import com.imanager.service.model.BaseDocument;
+import com.imanager.service.model.Customer;
 import com.imanager.service.model.Sequence;
 
 @Repository
@@ -83,8 +85,11 @@ public class BaseDAOImpl implements IBaseDAO {
 
 	@Override
 	public void insert(BaseDocument document) throws SequenceException {
+		Customer customer = (Customer)document;
+		Address address = customer.getAddress();
+		mongoOperation.insert(address);
 		Long sequenceId = getNextSequenceId(document.getKeyName());
-		document.setKeyValue(sequenceId);
+		customer.setKeyValue(sequenceId);
 		mongoOperation.insert(document);
 	}
 

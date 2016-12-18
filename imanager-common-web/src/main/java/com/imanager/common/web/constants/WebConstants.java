@@ -17,6 +17,8 @@ public class WebConstants {
 	public static final String NO_DATA_FOUND = "Data not found";
 	public static final String INVALID_INPUT_JSON = "Invalid Input JSON";
 
+	public static final String RESPONSE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
 	private WebConstants() {
 	}
 }

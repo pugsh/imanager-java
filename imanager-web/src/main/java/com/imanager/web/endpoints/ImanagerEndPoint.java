@@ -24,7 +24,7 @@ import com.imanager.common.log.LogCode;
 import com.imanager.common.web.constants.WebConstants;
 import com.imanager.common.web.response.ISimpleResponse;
 import com.imanager.common.web.response.SimpleResponseBuilder;
-import com.imanager.common.web.util.CommonRequestHelper;
+import com.imanager.common.web.util.CommonRequestUtil;
 import com.imanager.common.web.util.SimpleResponseUtil;
 import com.imanager.service.IBaseService;
 import com.imanager.service.enums.DocumentType;
@@ -42,7 +42,7 @@ public class ImanagerEndPoint {
 	private SimpleResponseBuilder responseBuilder;
 
 	@Autowired
-	private CommonRequestHelper requestHelper;
+	private CommonRequestUtil requestHelper;
 
 	@Autowired
 	private SimpleResponseUtil responseUtil;

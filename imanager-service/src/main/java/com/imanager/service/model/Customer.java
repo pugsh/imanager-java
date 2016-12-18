@@ -1,6 +1,7 @@
 package com.imanager.service.model;
 
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.imanager.service.constants.ServiceConstants;
@@ -12,6 +13,7 @@ public class Customer extends BaseDocument {
 	private Long customerId;
 	private String customerName;
 	private String contact;
+	@DBRef(lazy = true)
 	private Address address;
 
 	public Long getCustomerId() {
@@ -47,12 +49,6 @@ public class Customer extends BaseDocument {
 	}
 
 	@Override
-	public String toString() {
-		return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", contact=" + contact
-				+ ", address=" + address + "]";
-	}
-
-	@Override
 	public String getKeyName() {
 		return ServiceConstants.PROPS_CUSTOMERID;
 	}
@@ -67,4 +63,9 @@ public class Customer extends BaseDocument {
 		this.customerId = value;
 	}
 
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", contact=" + contact
+				+ ", address=" + address + "]";
+	}
 }
