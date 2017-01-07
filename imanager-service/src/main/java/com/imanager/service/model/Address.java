@@ -1,9 +1,6 @@
 package com.imanager.service.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "addresses")
-public class Address extends BaseDocument {
+public class Address {
 
 	private String street;
 	private String city;
@@ -45,21 +42,6 @@ public class Address extends BaseDocument {
 	@Override
 	public String toString() {
 		return "Address [street=" + street + ", city=" + city + ", state=" + state + ", pin=" + pin + "]";
-	}
-
-	@Override
-	public String getKeyName() {
-		return null;
-	}
-
-	@Override
-	public Long getKeyValue() {
-		return null;
-	}
-
-	@Override
-	public void setKeyValue(Long value) {
-
 	}
 
 }

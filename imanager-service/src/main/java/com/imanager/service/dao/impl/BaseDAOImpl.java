@@ -5,16 +5,12 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.WriteResultChecking;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
@@ -28,17 +24,13 @@ import com.imanager.service.model.Address;
 import com.imanager.service.model.BaseDocument;
 import com.imanager.service.model.Customer;
 import com.imanager.service.model.Sequence;
+import com.mongodb.WriteResult;
 
 @Repository
 public class BaseDAOImpl implements IBaseDAO {
 
 	@Autowired
 	private MongoOperations mongoOperation;
-
-	@PostConstruct
-	private void setWriteResultChecking() {
-		((MongoTemplate) mongoOperation).setWriteResultChecking(WriteResultChecking.EXCEPTION);
-	}
 
 	@Override
 	public BaseDocument findById(DocumentFilter<? extends Serializable> filter) throws Exception {
@@ -106,9 +98,13 @@ public class BaseDAOImpl implements IBaseDAO {
 	}
 
 	@Override
-	public void delete(Class<?> documentClass, String keyName, Integer... deleteIds) throws SequenceException {
+	public boolean delete(Class<?> documentClass, String keyName, Integer... deleteIds) throws Exception {
 		Query query = new Query(where(keyName).in((Object[]) deleteIds));
-		mongoOperation.remove(query, documentClass);
+		WriteResult writeResult = mongoOperation.remove(query, documentClass);
+		if (writeResult != null && writeResult.getN() > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	private Long getNextSequenceId(String key) throws SequenceException {

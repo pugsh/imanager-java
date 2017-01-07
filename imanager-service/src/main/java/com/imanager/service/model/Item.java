@@ -1,8 +1,11 @@
 package com.imanager.service.model;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 public class Item {
 
 	private Integer quantity;
+	@DBRef(lazy = true)
 	private Product product;
 
 	public Integer getQuantity() {

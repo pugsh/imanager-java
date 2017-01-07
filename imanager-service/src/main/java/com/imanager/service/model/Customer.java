@@ -1,7 +1,6 @@
 package com.imanager.service.model;
 
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.imanager.service.constants.ServiceConstants;
@@ -13,7 +12,6 @@ public class Customer extends BaseDocument {
 	private Long customerId;
 	private String customerName;
 	private String contact;
-	@DBRef(lazy = true)
 	private Address address;
 
 	public Long getCustomerId() {

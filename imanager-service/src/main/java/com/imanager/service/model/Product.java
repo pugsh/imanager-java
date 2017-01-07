@@ -3,6 +3,7 @@ package com.imanager.service.model;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.imanager.service.constants.ServiceConstants;
@@ -14,6 +15,7 @@ public class Product extends BaseDocument {
 	private Long productId;
 	private String productName;
 	private Double price;
+	@DBRef(lazy = true)
 	private List<Supplier> suppliers;
 
 	public Product() {

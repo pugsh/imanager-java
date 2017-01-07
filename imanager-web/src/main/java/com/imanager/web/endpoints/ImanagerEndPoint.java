@@ -34,6 +34,8 @@ import com.imanager.service.request.SearchRequest;
 import com.imanager.service.request.ServiceRequest;
 import com.imanager.service.vo.BaseVO;
 import com.imanager.util.ServiceDelegate;
+import com.imanager.web.exception.InputValidationException;
+import com.imanager.web.util.WebUtil;
 
 @Service
 @Path("/v1")
@@ -145,6 +147,7 @@ public class ImanagerEndPoint {
 		BaseVO baseVO;
 		Integer[] deleteIds;
 		try {
+			WebUtil.validateInput(documentName, action, entityData);
 			DocumentType documentType = DocumentType.toEnum(documentName);
 			ActionType actionType = ActionType.toEnum(action);
 			ServiceRequest serviceRequest = new ServiceRequest();
@@ -168,6 +171,10 @@ public class ImanagerEndPoint {
 			builder = responseBuilder.buildSuccessResponse(successResponse, headers, WebConstants.SUCCESS,
 					WebConstants.STATUS_200);
 			response = builder.build();
+		} catch (InputValidationException e) {
+			builder = responseUtil.buildErrorResponse(headers, WebConstants.INPUT_VALIDATION_ERR, responseBuilder);
+			response = builder.build();
+			logger.error(LogCode.API_ERROR_CODE, "Input validation exception in doCRUD.", e);
 		} catch (Exception e) {
 			builder = responseUtil.buildErrorResponse(headers, "Unexpected error occured.", responseBuilder);
 			response = builder.build();

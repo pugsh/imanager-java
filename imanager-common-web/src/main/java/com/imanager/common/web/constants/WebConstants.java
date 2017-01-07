@@ -19,6 +19,8 @@ public class WebConstants {
 
 	public static final String RESPONSE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+	public static final String INPUT_VALIDATION_ERR = "Invalid input data specified";
+	
 	private WebConstants() {
 	}
 }

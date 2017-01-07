@@ -11,7 +11,8 @@
 	<context:property-placeholder
 		location="classpath*:/imanager/app-props.properties" />
 
-	<mongo:mongo-client host="${mongo.host}" port="${mongo.port}" />
+	<mongo:mongo-client host="${mongo.host}" port="${mongo.port}">
+	</mongo:mongo-client>
 	<mongo:db-factory dbname="${mongo.db}" mongo-ref="mongo" />
 	<!-- define default mongo converter -->
 	<mongo:mapping-converter id="converter" />
